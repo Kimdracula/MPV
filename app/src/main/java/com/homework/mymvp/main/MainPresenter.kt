@@ -1,15 +1,15 @@
 package com.homework.mymvp.main
 
 import com.github.terrakok.cicerone.Router
-import com.homework.mymvp.core.IScreens
+import com.homework.mymvp.core.Screens.users
 import moxy.MvpPresenter
 
 
-class MainPresenter(private val router: Router,private val screens: IScreens): MvpPresenter<MainView>() {
+class MainPresenter(private val router: Router): MvpPresenter<MainView>() {
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        router.replaceScreen(screens.users())
+        router.replaceScreen(users())
     }
 
     fun onBackPressed() {

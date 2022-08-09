@@ -2,8 +2,7 @@ package com.homework.mymvp.main
 
 import android.os.Bundle
 import com.github.terrakok.cicerone.androidx.AppNavigator
-import com.homework.mymvp.core.App
-import com.homework.mymvp.core.AppScreens
+import com.homework.mymvp.App
 import com.homework.mymvp.R
 import com.homework.mymvp.core.OnBackPressedListener
 import com.homework.mymvp.databinding.ActivityMainBinding
@@ -15,8 +14,10 @@ class MainActivity : MvpAppCompatActivity(), MainView {
 
     private val navigator = AppNavigator(this, R.id.container)
     private lateinit var binding: ActivityMainBinding
+    private var app = App()
+
     private val presenter by moxyPresenter {
-MainPresenter(App.instance.router, AppScreens())
+    MainPresenter(app.router)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,11 +29,11 @@ MainPresenter(App.instance.router, AppScreens())
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        App.instance.navigationHolder.setNavigator(navigator)
+        app.navigatorHolder.setNavigator(navigator)
     }
 
     override fun onPause() {
-        App.instance.navigationHolder.removeNavigator()
+        app.navigatorHolder.removeNavigator()
         super.onPause()
     }
 
