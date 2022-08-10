@@ -14,10 +14,9 @@ class MainActivity : MvpAppCompatActivity(), MainView {
 
     private val navigator = AppNavigator(this, R.id.container)
     private lateinit var binding: ActivityMainBinding
-    private var app = App()
 
     private val presenter by moxyPresenter {
-    MainPresenter(app.router)
+    MainPresenter(App.INSTANCE.router)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,11 +28,11 @@ class MainActivity : MvpAppCompatActivity(), MainView {
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        app.navigatorHolder.setNavigator(navigator)
+        App.INSTANCE.navigatorHolder.setNavigator(navigator)
     }
 
     override fun onPause() {
-        app.navigatorHolder.removeNavigator()
+        App.INSTANCE.navigatorHolder.removeNavigator()
         super.onPause()
     }
 

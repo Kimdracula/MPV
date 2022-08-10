@@ -16,11 +16,10 @@ class UsersFragment : MvpAppCompatFragment(),UsersView, OnBackPressedListener {
 
     private var _binding: FragmentUsersBinding? = null
     private val binding get() = _binding!!
-    private val app = App()
 
     var adapter: UsersRVAdapter? = null
     private val presenter: UsersPresenter by moxyPresenter {
-        UsersPresenter(GithubUserRepo(), app.router)
+        UsersPresenter(GithubUserRepo(), App.INSTANCE.router)
     }
 
     override fun onCreateView(

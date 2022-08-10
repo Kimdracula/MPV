@@ -23,10 +23,9 @@ class LoginFragment : MvpAppCompatFragment(), LoginView, OnBackPressedListener {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private val app = App()
 
     private val presenter: LoginPresenter by moxyPresenter {
-        LoginPresenter(app.router)
+        LoginPresenter(App.INSTANCE.router)
     }
 
     override fun onCreateView(
