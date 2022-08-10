@@ -1,20 +1,13 @@
 package com.homework.mymvp.login
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.homework.mymvp.R
+import com.homework.mymvp.KEY_BUNDLE
 import com.homework.mymvp.core.App
 import com.homework.mymvp.core.OnBackPressedListener
 import com.homework.mymvp.databinding.FragmentLoginBinding
-import com.homework.mymvp.databinding.FragmentUsersBinding
-import com.homework.mymvp.repository.GithubUserRepo
-import com.homework.mymvp.users.UsersFragment
-import com.homework.mymvp.users.UsersPresenter
-import com.homework.mymvp.users.UsersRVAdapter
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
@@ -27,6 +20,14 @@ class LoginFragment : MvpAppCompatFragment(), LoginView, OnBackPressedListener {
     private val presenter: LoginPresenter by moxyPresenter {
         LoginPresenter(App.INSTANCE.router)
     }
+    private var param: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            param = it.getString(KEY_BUNDLE)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,11 +37,18 @@ class LoginFragment : MvpAppCompatFragment(), LoginView, OnBackPressedListener {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.tvLogin.text = param
+    }
 
     companion object {
-        fun newInstance(): LoginFragment {
-            return LoginFragment()
-        }
+        fun newInstance(param: String) =
+            LoginFragment().apply {
+                arguments = Bundle().apply {
+                    putString(KEY_BUNDLE, param)
+                }
+            }
     }
 
     override fun onBackPressed(): Boolean = presenter.backPressed()
@@ -51,5 +59,8 @@ class LoginFragment : MvpAppCompatFragment(), LoginView, OnBackPressedListener {
         _binding = null
     }
 
+    override fun setText() {
+
+    }
 
 }

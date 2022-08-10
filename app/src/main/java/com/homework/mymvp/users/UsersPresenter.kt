@@ -30,7 +30,7 @@ class UsersPresenter(private val usersRepo: GithubUserRepo, private val router: 
         viewState.init()
         loadData()
         usersListPresenter.itemClickListener = { itemView ->
-router.navigateTo(Screens.login())
+router.navigateTo(Screens.login("Жопа"))
 
         }
 

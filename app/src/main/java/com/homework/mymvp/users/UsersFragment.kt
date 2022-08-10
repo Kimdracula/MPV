@@ -17,7 +17,7 @@ class UsersFragment : MvpAppCompatFragment(),UsersView, OnBackPressedListener {
     private var _binding: FragmentUsersBinding? = null
     private val binding get() = _binding!!
 
-    var adapter: UsersRVAdapter? = null
+    private var adapter: UsersRVAdapter? = null
     private val presenter: UsersPresenter by moxyPresenter {
         UsersPresenter(GithubUserRepo(), App.INSTANCE.router)
     }
@@ -45,7 +45,6 @@ class UsersFragment : MvpAppCompatFragment(),UsersView, OnBackPressedListener {
             rvUsers.layoutManager = LinearLayoutManager(context)
             rvUsers.adapter = adapter
         }
-
     }
 
     override fun updateList() {

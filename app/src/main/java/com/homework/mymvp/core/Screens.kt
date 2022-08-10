@@ -6,5 +6,5 @@ import com.homework.mymvp.users.UsersFragment
 
 object Screens {
     fun users() = FragmentScreen { UsersFragment.newInstance() }
-    fun login() = FragmentScreen { LoginFragment.newInstance() }
+    fun login(string: String) = FragmentScreen { LoginFragment.newInstance(string) }
 }
