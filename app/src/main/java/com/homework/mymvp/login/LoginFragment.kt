@@ -58,9 +58,4 @@ class LoginFragment : MvpAppCompatFragment(), LoginView, OnBackPressedListener {
         super.onDestroy()
         _binding = null
     }
-
-    override fun setText() {
-
-    }
-
 }

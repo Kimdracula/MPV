@@ -3,7 +3,7 @@ package com.homework.mymvp.core
 import android.app.Application
 import com.github.terrakok.cicerone.Cicerone
 
-class App:Application() {
+class App : Application() {
 
     private val cicerone = Cicerone.create()
     val router get() = cicerone.router
@@ -19,4 +19,5 @@ class App:Application() {
             private set
     }
 }
+
 

@@ -11,12 +11,11 @@ import moxy.ktx.moxyPresenter
 
 class MainActivity : MvpAppCompatActivity(), MainView {
 
-
     private val navigator = AppNavigator(this, R.id.container)
     private lateinit var binding: ActivityMainBinding
 
     private val presenter by moxyPresenter {
-    MainPresenter(App.INSTANCE.router)
+        MainPresenter(App.INSTANCE.router)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -9,6 +9,7 @@ import moxy.MvpPresenter
 class UsersPresenter(private val usersRepo: GithubUserRepo, private val router: Router) :
     MvpPresenter<UsersView>() {
 
+
     class UsersListPresenter : IUserListPresenter {
         val users = mutableListOf<GithubUser>()
 
@@ -20,7 +21,6 @@ class UsersPresenter(private val usersRepo: GithubUserRepo, private val router: 
         }
 
         override fun getCount(): Int = users.size
-
     }
 
     val usersListPresenter = UsersListPresenter()
@@ -30,10 +30,8 @@ class UsersPresenter(private val usersRepo: GithubUserRepo, private val router: 
         viewState.init()
         loadData()
         usersListPresenter.itemClickListener = { itemView ->
-router.navigateTo(Screens.login("Жопа"))
-
+            router.navigateTo(Screens.login(usersListPresenter.users[itemView.pos].login))
         }
-
     }
 
     private fun loadData() {
@@ -46,5 +44,4 @@ router.navigateTo(Screens.login("Жопа"))
         router.exit()
         return true
     }
-
 }
