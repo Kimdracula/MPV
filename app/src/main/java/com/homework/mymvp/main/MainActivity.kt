@@ -2,7 +2,7 @@ package com.homework.mymvp.main
 
 import android.os.Bundle
 import com.github.terrakok.cicerone.androidx.AppNavigator
-import com.homework.mymvp.App
+import com.homework.mymvp.core.App
 import com.homework.mymvp.R
 import com.homework.mymvp.core.OnBackPressedListener
 import com.homework.mymvp.databinding.ActivityMainBinding

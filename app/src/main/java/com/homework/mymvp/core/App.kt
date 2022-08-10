@@ -1,4 +1,4 @@
-package com.homework.mymvp
+package com.homework.mymvp.core
 
 import android.app.Application
 import com.github.terrakok.cicerone.Cicerone

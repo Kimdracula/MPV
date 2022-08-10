@@ -4,21 +4,31 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.homework.mymvp.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.homework.mymvp.core.App
+import com.homework.mymvp.core.OnBackPressedListener
+import com.homework.mymvp.databinding.FragmentUsersBinding
+import com.homework.mymvp.repository.GithubUserRepo
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class UsersFragment : MvpAppCompatFragment(),UsersView {
+class UsersFragment : MvpAppCompatFragment(),UsersView, OnBackPressedListener {
 
+    private var _binding: FragmentUsersBinding? = null
+    private val binding get() = _binding!!
+    private val app = App()
+
+    var adapter: UsersRVAdapter? = null
     private val presenter: UsersPresenter by moxyPresenter {
-        UsersPresenter()
+        UsersPresenter(GithubUserRepo(), app.router)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_users, container, false)
+    ): View {
+        _binding = FragmentUsersBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
 
@@ -26,5 +36,25 @@ class UsersFragment : MvpAppCompatFragment(),UsersView {
         fun newInstance(): UsersFragment {
             return UsersFragment()
         }
+    }
+
+    override fun onBackPressed(): Boolean = presenter.backPressed()
+
+    override fun init() {
+        adapter = UsersRVAdapter(presenter.usersListPresenter)
+        with(binding){
+            rvUsers.layoutManager = LinearLayoutManager(context)
+            rvUsers.adapter = adapter
+        }
+
+    }
+
+    override fun updateList() {
+        adapter?.notifyDataSetChanged()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
