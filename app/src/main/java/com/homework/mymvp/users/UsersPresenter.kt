@@ -1,13 +1,13 @@
 package com.homework.mymvp.users
 
 import com.github.terrakok.cicerone.Router
+import com.homework.mymvp.core.Screens
 import com.homework.mymvp.model.GithubUser
 import com.homework.mymvp.repository.GithubUserRepo
 import moxy.MvpPresenter
 
 class UsersPresenter(private val usersRepo: GithubUserRepo, private val router: Router) :
     MvpPresenter<UsersView>() {
-
 
     class UsersListPresenter : IUserListPresenter {
         val users = mutableListOf<GithubUser>()
@@ -17,7 +17,6 @@ class UsersPresenter(private val usersRepo: GithubUserRepo, private val router: 
         override fun bindView(view: UserItemView) {
             val user = users[view.pos]
             view.setLogin(user.login)
-
         }
 
         override fun getCount(): Int = users.size
@@ -31,7 +30,8 @@ class UsersPresenter(private val usersRepo: GithubUserRepo, private val router: 
         viewState.init()
         loadData()
         usersListPresenter.itemClickListener = { itemView ->
-//НАДО РЕАЛИЗОВАТЬ КЛИК
+router.navigateTo(Screens.login())
+
         }
 
     }
