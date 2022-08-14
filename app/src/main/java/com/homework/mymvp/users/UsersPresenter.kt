@@ -44,11 +44,15 @@ class UsersPresenter(private val usersRepo: GithubUserRepo, private val router: 
             .delay(random, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                usersListPresenter.users.addAll(it)
-                viewState.updateList()
-                viewState.hideProgressBar()
-            }
+            .subscribe(
+                {
+                    viewState.showProgressBar()
+                    usersListPresenter.users.addAll(it)
+                    viewState.updateList()
+                },
+                { viewState.showToast() },
+                { viewState.hideProgressBar() }
+            )
     }
 
     fun backPressed(): Boolean {

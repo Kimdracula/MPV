@@ -10,4 +10,5 @@ interface UsersView:MvpView{
     fun updateList()
     fun showProgressBar()
     fun hideProgressBar()
+    fun showToast()
 }

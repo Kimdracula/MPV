@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.homework.mymvp.R
 import com.homework.mymvp.core.App
 import com.homework.mymvp.core.OnBackPressedListener
 import com.homework.mymvp.databinding.FragmentUsersBinding
@@ -57,6 +59,10 @@ class UsersFragment : MvpAppCompatFragment(),UsersView, OnBackPressedListener {
 
     override fun hideProgressBar() {
         binding.progressBar.visibility = View.GONE
+    }
+
+    override fun showToast() {
+        Toast.makeText(requireContext(),getString(R.string.error_toast),Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroy() {
