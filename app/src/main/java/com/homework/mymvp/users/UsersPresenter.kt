@@ -3,8 +3,12 @@ package com.homework.mymvp.users
 import com.github.terrakok.cicerone.Router
 import com.homework.mymvp.core.Screens
 import com.homework.mymvp.model.GithubUser
+import com.homework.mymvp.random
 import com.homework.mymvp.repository.GithubUserRepo
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import moxy.MvpPresenter
+import java.util.concurrent.TimeUnit
 
 class UsersPresenter(private val usersRepo: GithubUserRepo, private val router: Router) :
     MvpPresenter<UsersView>() {
@@ -27,6 +31,7 @@ class UsersPresenter(private val usersRepo: GithubUserRepo, private val router: 
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
+        viewState.showProgressBar()
         viewState.init()
         loadData()
         usersListPresenter.itemClickListener = { itemView ->
@@ -35,9 +40,15 @@ class UsersPresenter(private val usersRepo: GithubUserRepo, private val router: 
     }
 
     private fun loadData() {
-        val users = usersRepo.getUsers()
-        usersListPresenter.users.addAll(users)
-        viewState.updateList()
+        usersRepo.getUsers()
+            .delay(random, TimeUnit.SECONDS)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                usersListPresenter.users.addAll(it)
+                viewState.updateList()
+                viewState.hideProgressBar()
+            }
     }
 
     fun backPressed(): Boolean {

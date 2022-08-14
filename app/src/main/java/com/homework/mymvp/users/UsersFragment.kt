@@ -51,6 +51,14 @@ class UsersFragment : MvpAppCompatFragment(),UsersView, OnBackPressedListener {
         adapter?.notifyDataSetChanged()
     }
 
+    override fun showProgressBar() {
+      binding.progressBar.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        binding.progressBar.visibility = View.GONE
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
