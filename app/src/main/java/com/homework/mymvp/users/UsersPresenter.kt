@@ -3,12 +3,16 @@ package com.homework.mymvp.users
 import com.github.terrakok.cicerone.Router
 import com.homework.mymvp.core.Screens
 import com.homework.mymvp.model.GithubUser
+import com.homework.mymvp.random
 import com.homework.mymvp.repository.GithubUserRepo
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import moxy.MvpPresenter
+import java.util.concurrent.TimeUnit
 
 class UsersPresenter(private val usersRepo: GithubUserRepo, private val router: Router) :
     MvpPresenter<UsersView>() {
-
 
     class UsersListPresenter : IUserListPresenter {
         val users = mutableListOf<GithubUser>()
@@ -16,8 +20,14 @@ class UsersPresenter(private val usersRepo: GithubUserRepo, private val router: 
         override var itemClickListener: ((UserItemView) -> Unit)? = null
 
         override fun bindView(view: UserItemView) {
-            val user = users[view.pos]
-            view.setLogin(user.login)
+            Observable.fromArray(users)
+                .distinct()
+                .subscribe({
+                    val user = it[view.pos]
+                    view.setLogin(user.login)
+                }, {
+                    it.printStackTrace()
+                })
         }
 
         override fun getCount(): Int = users.size
@@ -27,6 +37,7 @@ class UsersPresenter(private val usersRepo: GithubUserRepo, private val router: 
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
+        viewState.showProgressBar()
         viewState.init()
         loadData()
         usersListPresenter.itemClickListener = { itemView ->
@@ -35,9 +46,18 @@ class UsersPresenter(private val usersRepo: GithubUserRepo, private val router: 
     }
 
     private fun loadData() {
-        val users = usersRepo.getUsers()
-        usersListPresenter.users.addAll(users)
-        viewState.updateList()
+        usersRepo.getUsers()
+            .delay(random, TimeUnit.SECONDS)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    usersListPresenter.users.addAll(it)
+                    viewState.updateList()
+                },
+                { viewState.showToast() },
+                { viewState.hideProgressBar() }
+            )
     }
 
     fun backPressed(): Boolean {
