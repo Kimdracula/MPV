@@ -8,17 +8,34 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonChoose"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="100dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="@string/select_picture" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:src="@drawable/no_image"
+        />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/buttonConvert"
+        android:layout_marginTop="50dp"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="Convert" />
+
+    <Button
+        android:id="@+id/buttonAbort"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Abort" />
+
 </LinearLayout>

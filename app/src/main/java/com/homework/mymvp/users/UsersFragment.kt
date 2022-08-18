@@ -7,9 +7,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.load.resource.bitmap.BitmapImageDecoderResourceDecoder
 import com.homework.mymvp.R
 import com.homework.mymvp.core.App
 import com.homework.mymvp.core.OnBackPressedListener
@@ -21,6 +23,9 @@ class UsersFragment : MvpAppCompatFragment(),UsersView, OnBackPressedListener{
 
     private var _binding: FragmentUsersBinding? = null
     private val binding get() = _binding!!
+    private val loadImage = registerForActivityResult(ActivityResultContracts.GetContent()) {
+        binding.imageView.setImageURI(it)
+    }
 
     private val presenter: UsersPresenter by moxyPresenter {
         UsersPresenter( App.INSTANCE.router)
@@ -36,10 +41,21 @@ class UsersFragment : MvpAppCompatFragment(),UsersView, OnBackPressedListener{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.button.setOnClickListener { permissionCheck() }
+        binding.buttonChoose.setOnClickListener { permissionCheck()
+        }
+        binding.buttonConvert.setOnClickListener {
+           convertToPng()
+        }
     }
 
-    fun permissionCheck() {
+    private fun convertToPng() {
+        Glide
+            .with(requireContext())
+            .load(binding.imageView.drawable)
+
+    }
+
+    private fun permissionCheck() {
         when {
             ContextCompat.checkSelfPermission(
                 requireContext(),
@@ -82,7 +98,7 @@ class UsersFragment : MvpAppCompatFragment(),UsersView, OnBackPressedListener{
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE))
     }
-    fun showAlertDialog(
+    private fun showAlertDialog(
         titleText: String,
         messageText: String
     ) {
@@ -104,7 +120,9 @@ class UsersFragment : MvpAppCompatFragment(),UsersView, OnBackPressedListener{
 
 
     private fun  getGallery(){
-        Toast.makeText(requireContext(),"Открываю галерею", Toast.LENGTH_LONG).show()
+
+            loadImage.launch("image/*")
+
     }
 
     companion object {

@@ -7,4 +7,5 @@
     <string name="read_explanation">Для корректной работы приложения требуется доступ к галереи</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="select_picture">Select Picture</string>
 </resources>
