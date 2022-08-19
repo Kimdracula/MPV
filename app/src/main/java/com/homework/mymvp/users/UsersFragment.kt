@@ -3,28 +3,36 @@ package com.homework.mymvp.users
 import android.Manifest
 import android.app.AlertDialog
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DecodeFormat
-import com.bumptech.glide.load.resource.bitmap.BitmapImageDecoderResourceDecoder
+import androidx.core.view.drawToBitmap
 import com.homework.mymvp.R
 import com.homework.mymvp.core.App
 import com.homework.mymvp.core.OnBackPressedListener
 import com.homework.mymvp.databinding.FragmentUsersBinding
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+
 
 class UsersFragment : MvpAppCompatFragment(),UsersView, OnBackPressedListener{
 
     private var _binding: FragmentUsersBinding? = null
     private val binding get() = _binding!!
+    private var uri: Uri? = null
+
     private val loadImage = registerForActivityResult(ActivityResultContracts.GetContent()) {
         binding.imageView.setImageURI(it)
+        uri = it
+
     }
 
     private val presenter: UsersPresenter by moxyPresenter {
@@ -49,10 +57,34 @@ class UsersFragment : MvpAppCompatFragment(),UsersView, OnBackPressedListener{
     }
 
     private fun convertToPng() {
-        Glide
-            .with(requireContext())
-            .load(binding.imageView.drawable)
+        val bitmap = binding.imageView.drawToBitmap()
+        var file: File? = null
+        val uriPathHelper = URIPathHelper()
+        val filePath = uri?.let { uriPathHelper.getPath(requireContext(), it) }
+        file = File(filePath +File.separator + "fileNameToSave.png")
+file.createNewFile()
 
+
+
+        val bos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos) // YOU can also save it in JPEG
+        val bitMapData = bos.toByteArray()
+
+        val fos = FileOutputStream(file)
+        fos.write(bitMapData)
+        fos.flush()
+        fos.close()
+
+
+        /*
+      val path = requireContext().filesDir.absolutePath
+       val compressedPictureFile = File(path+ uri?.encodedPath.toString())
+        val bitmap = BitmapFactory.decodeFile(path+ uri?.encodedPath.toString())
+        val fOut: FileOutputStream = FileOutputStream(compressedPictureFile)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, fOut)
+        fOut.flush()
+        fOut.close()
+*/
     }
 
     private fun permissionCheck() {
